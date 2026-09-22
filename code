@@ -1,0 +1,85 @@
+import numpy as np
+orders = np.array([
+    [1001, 202, 1, 1200, 2],
+    [1002, 202, 3, 850, 1],
+    [1003, 201, 2, 2500, 1],
+    [1004, 203, 4, 600, 3],
+    [1005, 204, 1, 1800, 2],
+    [1006, 202, 5, 3200, 1],
+    [1007, 205, 2, 950, 2],
+    [1008, 203, 3, 1500, 1],
+    [1009, 201, 5, 4200, 3],
+    [1010, 204, 4, 750, 1],
+    [1011, 205, 1, 2100, 2],
+    [1012, 202, 2, 3800, 3],
+    [1013, 203, 5, 1100, 2],
+    [1014, 204, 3, 2900, 1],
+    [1015, 205, 4, 1750, 3],
+    [1016, 201, 1, 1350, 2],
+    [1017, 202, 5, 5100, 1],
+    [1018, 203, 2, 2300, 3],
+    [1019, 204, 1, 900, 2],
+    [1020, 205, 3, 3600, 1]
+])
+columns = ["Order_ID", "Customer_ID", "Product_ID", "Amount", "Payment_Method"]
+print("=" * 40)
+print("E-COMMERCE SALES ANALYTICS")
+print("=" * 40)
+print(" " * 12, "SALES OVERVIEW")
+print("TOTAL ORDERS:", len(orders))
+print("TOTAL REVENUE:", np.sum(orders[:, 3]))
+print("AVERAGE ORDER:", np.mean(orders[:, 3]))
+print("MEDIAN ORDER VALUE:", np.median(orders[:, 3]))
+print("HIGHEST ORDER VALUE:", np.max(orders[:, 3]))
+print("LOWEST ORDER VALUE:", np.min(orders[:, 3]))
+print("STANDARD DEVIATION VALUE:", np.std(orders[:, 3]))
+print("=" * 40)
+print(" " * 4, "CUSTOMER INSIGHTS")
+# TOP SPENDING CUSTOMER
+uniques = np.unique(orders[:, 1])
+total_spend = []
+for i in uniques:
+    spending = np.sum(orders[orders[:, 1] == i, 3])
+    total_spend.append(spending)
+print(total_spend)
+print("TOP SPENDING CUSTOMER ID :", uniques[np.argmax(total_spend)])
+print("TOP TOTAL SPENDING:", np.max(total_spend))
+# most active
+count = []
+for i in uniques:
+    new = np.sum(orders[:, 1] == i)
+    count.append(new)
+print("MOST ACTIVE CUSTOMER:", uniques[np.argmax(count)])
+print("HIGH VALUE USER:", uniques[np.argmax(total_spend)])
+print("=" * 40)
+print(" " * 4, "PRODUCT INSIGHTS")
+# best product
+uniquess = np.unique(orders[:, 2])
+new_count = []
+for i in uniquess:
+    nn = np.sum(orders[:, 2] == i)
+    new_count.append(nn)
+print("BEST PRODUCT(HIGHEST SELLING):", uniquess[np.argmax(new_count)])
+print("LOWEST PRODUCT:", uniquess[np.argmin(new_count)])
+top3 = np.argsort(new_count)[::-1][:3]
+print("TOP 3 PRODUCTS:", uniquess[top3])
+print("=" * 40)
+print(" " * 4, "PAYMENT ANALYSIS")
+# PAYMENT ORDERS
+unique_payment_method = np.unique(orders[:, 4])
+count_payment = []
+for i in unique_payment_method:
+    total = np.sum(orders[:, 4] == i)
+    count_payment.append(total)
+print("UPI ORDERS:", count_payment[0])
+print("CARD ORDERS:", count_payment[1])
+print("NET BANKING ORDERS:", count_payment[2])
+print("MOST USED METHOD:", unique_payment_method[np.argmax(count_payment)])
+# PERCENTAGE CONTRIBUTION TO TOTAL REVENUE
+total_payments = []
+for i in unique_payment_method:
+    payments = np.sum(orders[orders[:, 4] == i, 3])
+    total_payments.append(payments)
+print("UPI PERCENTAGE CONTRIBUTION:", (total_payments[0] / np.sum(orders[:, 3])) * 100)
+print("CARD PERCENTAGE CONTRIBUTION:", (total_payments[1] / np.sum(orders[:, 3])) * 100)
+print("NET BANKING PERCENTAGE CONTRIBUTION:", (total_payments[2] / np.sum(orders[:, 3])) * 100)
